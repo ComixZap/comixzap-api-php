@@ -1,2 +1,3 @@
 debug = true
 cbz.root = /home/user/Comics
+;origins.allow[] = example.com
