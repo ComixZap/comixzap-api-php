@@ -3,6 +3,7 @@
 namespace Coverslide\Application;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
@@ -90,8 +91,53 @@ class CbzApplication extends Application
     protected function defineRoutes()
     {
         //$this->get('/', "Coverslide.RootController:indexAction");
+        $this->before(array($this, "beforeHandler"));
         $this->get('/file-list', "Coverslide.FileListController:filesAction");
         $this->get('/comic/list', "Coverslide.ComicController:listAction");
         $this->get('/comic/image', "Coverslide.ComicController:imageAction");
+        $this->after(array($this, "afterHandler"));
+    }
+
+    protected function beforeHandler (Request $request) {
+        $origin = $request->headers->get('origin');
+        if (!$origin) {
+            return;
+        }
+        if (!$this->originMatches($origin)) {
+            $response = new Response();
+            $response->setStatusCode(403);
+            return $response;
+        }
+    }
+
+    private function originMatches ($origin) {
+        $allowedOrigins = $this->config->get('origin.allow');
+        if (!isset($allowedOrigins)) {
+            return true;
+        }
+        $originParts = parse_url($origin);
+        foreach ($allowedOrigins as $allowed) {
+            if ($allowed === '*') {
+                return true;
+            }
+            $allowedParts = parse_url($allowed);
+            if (isset($allowedParts['scheme']) && $originParts['scheme'] !== $allowedParts['scheme']) {
+                continue;
+            } else if (!isset($allowedParts['scheme'])) {
+                $allowedParts['host'] = $allowedParts['path'];
+            }
+            if ($allowedParts['host'] === $originParts['host']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function afterHandler (Request $request, Response $response) {
+        $origin = $request->headers->get('origin');
+        if ($origin) {
+            $response->headers->set('Access-Control-Allow-Origin', $origin);
+        }
+        return $response;
     }
 }
