@@ -108,7 +108,12 @@ class ComicController
                 $responseHeaders['Content-Encoding'] = 'gzip';
                 return new StreamedResponse(
                     function () use ($zipReader, $fileInfo) {
-                        echo $zipReader->createGzipDataFromFileInfo($fileInfo);
+                        ob_flush();
+                        echo $zipReader->createGzipHeader($fileInfo);
+                        flush();
+                        echo $zipReader->getRawDataFromFileInfo($fileInfo); //raw data
+                        flush();
+                        echo $zipReader->createGzipFooter($fileInfo);
                     },
                     200,
                     $responseHeaders

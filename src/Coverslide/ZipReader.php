@@ -76,13 +76,22 @@ class ZipReader
         return fread($this->fileHandle, $fileInfo['csize']);
     }
 
+    public function createGzipHeader($fileInfo)
+    {
+        return pack('nCCCCV', 0x1f8b,8,0,0,0,0); //gzip header
+    }
+
+    public function createGzipFooter($fileInfo)
+    {
+        return pack('VV', $fileInfo['crc32'], $fileInfo['usize']); //gzip footer
+    }
+
     public function createGzipDataFromFileInfo($fileInfo)
     {
         $gzipData = '';
-        $gzipData .= pack('nCCCCV', 0x1f8b,8,0,0,0,0); //gzip header
+        $gzipData .= $this->createGzipHeader($fileInfo);
         $gzipData .= $this->getRawDataFromFileInfo($fileInfo); //raw data
-        $gzipData .= pack('VV', $fileInfo['crc32'], $fileInfo['usize']); //gzip footer
-
+        $gzipData .= $this->createGzipFooter($fileInfo);
         return $gzipData;
     }
 
