@@ -1,12 +1,12 @@
 <?php
 
-namespace Coverslide\Controller;
+namespace ComixZap\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Coverslide\ZipReader;
+use ComixZap\Utility\ZipReader;
 
 class ComicController
 {

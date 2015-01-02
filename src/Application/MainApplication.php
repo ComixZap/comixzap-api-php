@@ -1,17 +1,16 @@
 <?php
 
-namespace Coverslide\Application;
+namespace ComixZap\Application;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Silex\Application;
 use Silex\Provider\ServiceControllerServiceProvider;
-use Coverslide\Controller\RootController;
-use Coverslide\Controller\FileListController;
-use Coverslide\Controller\ComicController;
+use ComixZap\Controller\FileListController;
+use ComixZap\Controller\ComicController;
 
-class CbzApplication extends Application
+class MainApplication extends Application
 {
     /**
      * @var string

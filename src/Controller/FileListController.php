@@ -1,10 +1,10 @@
 <?php
 
-namespace Coverslide\Controller;
+namespace ComixZap\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Coverslide\FileLister;
+use ComixZap\Utility\FileLister;
 
 class FileListController
 {

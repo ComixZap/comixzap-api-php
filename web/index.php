@@ -8,7 +8,7 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
 
 require __DIR__.'/../vendor/autoload.php';
 
-$app = new \Coverslide\Application\CbzApplication();
+$app = new \ComixZap\Application\MainApplication();
 $app->setRootPath(__DIR__ . '/../');
 $app->initialize();
 $app->run();

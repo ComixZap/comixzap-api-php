@@ -1,6 +1,6 @@
 <?php
 
-namespace Coverslide;
+namespace ComixZap\Utility;
 
 class ZipReader
 {

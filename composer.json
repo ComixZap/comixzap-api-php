@@ -3,6 +3,6 @@
         "silex/silex": "@stable"
     },
     "autoload": {
-        "psr-0": {"Coverslide" : "src/"}
+        "psr-4": {"ComixZap\\" : "src/"}
     }
 }
