@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Silex\Application;
-use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Coverslide\Controller\RootController;
 use Coverslide\Controller\FileListController;
@@ -14,14 +13,19 @@ use Coverslide\Controller\ComicController;
 
 class CbzApplication extends Application
 {
-    use Application\TwigTrait;
-
     /**
      * @var string
      */
     private $rootPath;
+
+    /**
+     * @var ParameterBag
+     */
     private $config;
 
+    /**
+     * @param $path string
+     */
     public function setRootPath($path)
     {
         $this->rootPath = $path;
@@ -45,27 +49,10 @@ class CbzApplication extends Application
     protected function registerProviders()
     {
         $this->register(new ServiceControllerServiceProvider());
-
-        $this->register(
-            new TwigServiceProvider(),
-            array(
-                'twig.path' => $this->rootPath . '/views'
-            )
-        );
     }
 
     protected function registerControllers()
     {
-        $this['Coverslide.RootController'] = $this->share(
-            \Closure::bind(
-                function () {
-                    return (new RootController())
-                        ->setTwig($this['twig']);
-                },
-                $this
-            )
-        );
-
         $this['Coverslide.FileListController'] = $this->share(
             \Closure::bind(
                 function () {
@@ -90,7 +77,6 @@ class CbzApplication extends Application
 
     protected function defineRoutes()
     {
-        //$this->get('/', "Coverslide.RootController:indexAction");
         $this->before(array($this, "beforeHandler"));
         $this->get('/file-list', "Coverslide.FileListController:filesAction");
         $this->get('/comic/list', "Coverslide.ComicController:listAction");
