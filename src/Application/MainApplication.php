@@ -23,19 +23,25 @@ class MainApplication extends Application
     private $config;
 
     /**
+     * @param $rootPath string
+     */
+    public function __construct($rootPath = '')
+    {
+        parent::__construct();
+
+        $this->setRootPath($rootPath);
+        $this->configure();
+        $this->registerProviders();
+        $this->registerControllers();
+        $this->defineRoutes();
+    }
+
+    /**
      * @param $path string
      */
     public function setRootPath($path)
     {
         $this->rootPath = $path;
-    }
-
-    public function initialize()
-    {
-        $this->configure();
-        $this->registerProviders();
-        $this->registerControllers();
-        $this->defineRoutes();
     }
 
     protected function configure()
