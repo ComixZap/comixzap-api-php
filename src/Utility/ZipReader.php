@@ -46,6 +46,8 @@ class ZipReader
 
             $comment = $cdBlockInfo['commentLength'] ? fread($this->fileHandle, $cdBlockInfo['commentLength']) : '';
 
+            unset($cdBlockInfo['header']);
+
             $cdBlockInfo = array_merge($cdBlockInfo, compact('filename', 'comment'));
 
             $files[] = $cdBlockInfo;
@@ -62,6 +64,7 @@ class ZipReader
 
         $fileInfo = $this->unpackFileBlock($fileBlock);
 
+        unset($fileInfo['header']);
         $fileInfo['offset'] = $offset;
         $fileInfo['filename'] = $fileInfo['filenameLength'] ? fread($this->fileHandle, $fileInfo['filenameLength']) : '';
         $fileInfo['extraField'] = $fileInfo['extraFieldLength'] ? fread($this->fileHandle, $fileInfo['extraFieldLength']) : '';
